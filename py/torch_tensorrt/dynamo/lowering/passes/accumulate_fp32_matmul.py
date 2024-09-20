@@ -16,9 +16,7 @@ def accumulate_fp32_matmul(gm: torch.fx.GraphModule) -> torch.fx.GraphModule:
     for matmul_node in matmul_nodes:
         # Prior to the matmul node, insert a cast to the 32-bit float32 node
         node_inputs = matmul_node.all_input_nodes
-        # Upcast only mm nodes in addmm and leave the bias
-        if matmul_node.target == torch.ops.aten.addmm.default:
-            node_inputs = node_inputs[:2]
+
 
         for node_input in node_inputs:
             with gm.graph.inserting_before(matmul_node):
